@@ -95,8 +95,9 @@ export default function Home() {
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#F5C800]/50 focus:bg-white/[0.07] transition-all text-sm h-24 resize-none"
                 placeholder="e.g. AI tool that gives founders a distribution plan — paste what you built, get specific communities and message templates"
                 value={form.appDescription}
-                onChange={e => setForm({ ...form, appDescription: e.target.value })}
+                onChange={e => setForm({ ...form, appDescription: e.target.value })}                
               />
+              <p className="text-white/20 text-xs mt-1">Be specific — at least 20 characters</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -131,7 +132,7 @@ export default function Home() {
 
         <button
           onClick={handleSubmit}
-          disabled={loading || !form.appDescription || !form.targetAudience}
+          disabled={loading || form.appDescription.length < 20 || form.targetAudience.length < 5}
           className="w-full bg-[#F5C800] hover:bg-[#f0c000] text-black font-bold py-4 rounded-xl text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
         >
           {loading ? (
