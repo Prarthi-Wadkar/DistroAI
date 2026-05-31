@@ -79,13 +79,20 @@ Do NOT suggest r/entrepreneur or r/startups.`
     if (!Array.isArray(channels)) channels = [channels];
 
     // Step 2 - Template for channel 1 only (free tier)
-    const freeTemplate = await callGroq(
-      "You are a copywriter for indie founders. Write genuine, non-salesy posts.",
-      `Write a ready-to-post message for ${channels[0].name}.
+   const freeTemplate = await callGroq(
+  "You are a copywriter for indie founders. Write genuine, non-salesy posts.",
+  `Write a ready-to-post message for ${channels[0].name}.
+You are writing AS THE FOUNDER of this product, in first person.
+Do NOT write as a third party who discovered the product.
+Do NOT say "I stumbled upon" or "there's a platform".
+Write as if YOU built it and YOU are sharing it with the community.
+
 Product: ${appName} - ${appDescription}
 Audience: ${targetAudience}
-Tone: genuine, not salesy. Length: 3 short paragraphs.`
-    );
+Tone: genuine, humble, founder sharing their work
+Length: 3 short paragraphs
+Start with the problem you noticed, then what you built, then invite feedback.`
+);
 
     // Step 3 - Week 1 actions
     const actionsRaw = await callGroq(
