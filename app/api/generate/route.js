@@ -27,8 +27,30 @@ function cleanJSON(raw) {
   return raw.trim().replace(/```json|```/g, "").trim();
 }
 
+const rateLimit = new Map();
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 1000;
+  const maxRequests = 3;
+  const requests = rateLimit.get(ip) || [];
+  const recent = requests.filter(time => now - time < windowMs);
+  if (recent.length >= maxRequests) return false;
+  rateLimit.set(ip, [...recent, now]);
+  return true;
+}
+
 export async function POST(request) {
   try {
+    // Rate limiting — INSIDE the function
+    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please wait a minute." },
+        { status: 429 }
+      );
+    }
+
     const { appName, appDescription, targetAudience, budget } = await request.json();
 
     if (!appDescription || !targetAudience) {
